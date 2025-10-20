@@ -1,14 +1,13 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import HomePage from "./pages/home.page";
 
 const App = () => {
-  const [count, setCount] = useState(0);
   return (
-    <div>
-      <h1 className="text-3xl font-bold underline">Zilla Home Page</h1>
-      <Button onClick={() => setCount(count + 1)}>Click me!</Button>
-      <p>You clicked {count} times</p>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
