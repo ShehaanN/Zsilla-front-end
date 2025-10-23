@@ -8,7 +8,7 @@ import img3 from "@/assets/images/img3.png";
 
 const HeroSection = () => {
   return (
-    <section className="relative px-4 lg:px-16 pt-8 pb-16">
+    <section className="relative  px-4 lg:px-32 pt-8 pb-16">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
         {/* left side */}
         <div className="space-y-6">
@@ -42,7 +42,7 @@ const HeroSection = () => {
               <Button
                 size="lg"
                 variant="outline"
-                className="w-full sm:w-auto px-8 py-4 text-lg"
+                className="w-full sm:w-auto px-8 py-4 text-lg disabled"
               >
                 View Collection
               </Button>
