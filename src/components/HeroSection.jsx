@@ -8,7 +8,7 @@ import img3 from "@/assets/images/img3.png";
 
 const HeroSection = () => {
   return (
-    <section className="relative  px-4 lg:px-32 pt-8 pb-16">
+    <section className="relative  px-4 lg:px-16 pt-8 pb-16">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
         {/* left side */}
         <div className="space-y-6">
@@ -52,11 +52,11 @@ const HeroSection = () => {
         {/* right side */}
         <div className="grid grid-cols-2 gap-4 h-[500px] lg:h-[600px]">
           {/* main image */}
-          <div className="col-span-2 relative rounded-3xl overflow-hidden bg-gradient-to-br from-indigo-100 to-blue-200">
+          <div className="col-span-2 relative rounded-3xl overflow-hidden bg-gradient-to-br from-indigo-100 to-blue-200 pb-3 h-90">
             <img
-              src={img1}
+              src="/assets/images/img3.jpg"
               alt="Main Image"
-              className="w-full h-2/3 object-cover"
+              className="w-full h-5/6 object-cover"
             />
             <div className="absolute bottom-4 left-4 right-4">
               <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4">
@@ -66,9 +66,9 @@ const HeroSection = () => {
             </div>
           </div>
           {/* sub images */}
-          <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-emerald-100 to-sky-100">
+          <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-emerald-100 to-sky-100 ">
             <img
-              src={img2}
+              src="/assets/images/img2.jpg"
               className="w-full h-full object-cover"
               alt="Sub Image 2"
             />
@@ -82,7 +82,7 @@ const HeroSection = () => {
 
           <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-blue-100 to-sky-100">
             <img
-              src={img3}
+              src="/assets/images/img1.jpg"
               className="w-full h-full object-cover"
               alt="Sub Image 3"
             />
