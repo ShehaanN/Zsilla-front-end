@@ -1,97 +1,92 @@
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Stars } from "lucide-react";
-import { Link } from "react-router-dom";
-import img1 from "@/assets/images/img1.png";
-import img2 from "@/assets/images/img2.png";
-import img3 from "@/assets/images/img3.png";
+import { Card } from "@/components/ui/card";
 
 const HeroSection = () => {
   return (
-    <section className="relative  px-4 lg:px-16 pt-8 pb-16">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-        {/* left side */}
-        <div className="space-y-6">
-          <div className="space-y-4">
-            <Badge className="bg-indigo-50 text-indigo-600 hover:bg-indigo-200 px-4 py-2">
-              <Stars className="w-4 h-4 mr-2" />
-              New Arrival
-            </Badge>
-
-            {/* headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 leading-tight">
-              Elevate Your
-              <br />
-              <span className="text-indigo-600">Everyday Look</span>
-            </h1>
-
-            {/* subheadline */}
-            <p className="text-lg sm:text-xl text-gray-600 max-w-lg">
-              Discover the latest trends in fashion and upgrade your wardrobe
-              with our new collection. Style meets comfort for every occasion.
-            </p>
-          </div>
-          {/* action buttons */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link to="#">
-              <Button size="lg" className="w-full sm:w-auto px-8 py-4 text-lg">
-                Shop Now
-              </Button>
-            </Link>
-            <Link to="#">
-              <Button
-                size="lg"
-                variant="outline"
-                className="w-full sm:w-auto px-8 py-4 text-lg disabled"
-              >
-                View Collection
-              </Button>
-            </Link>
-          </div>
-        </div>
-        {/* right side */}
-        <div className="grid grid-cols-2 gap-4 h-[500px] lg:h-[600px]">
-          {/* main image */}
-          <div className="col-span-2 relative rounded-3xl overflow-hidden bg-gradient-to-br from-indigo-100 to-blue-200 pb-3 h-90">
-            <img
-              src="/assets/images/img3.jpg"
-              alt="Main Image"
-              className="w-full h-5/6 object-cover"
-            />
-            <div className="absolute bottom-4 left-4 right-4">
-              <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4">
-                <h3 className="font-semibold text-gray-900">New Collection</h3>
-                <p className="text-sm text-gray-600">50+ New Arrivals</p>
+    <section className=" bg-gray-100 ">
+      {/* Hero Section */}
+      <div className=" px-12 py-8">
+        <div className=" grid grid-cols-1 lg:grid-cols-3 gap-6 ">
+          {/* Main Featured Card - Left */}
+          <Card className="lg:col-span-2 rounded-3xl overflow-hidden bg-gradient-to-br from-green-200 via-gray-300 to-blue-200 relative h-[625px] border-0 shadow-lg group">
+            <div className="absolute inset-0">
+              <img
+                src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&h=400&fit=crop"
+                alt="Summer Fashion"
+                className="w-full h-full object-cover opacity-90"
+              />
+            </div>
+            <div className="relative z-10 p-12 h-full flex flex-col justify-center">
+              <div className="max-w-md">
+                <h2 className="text-5xl md:text-6xl font-bold text-gray-800 mb-4 leading-tight drop-shadow-lg">
+                  Color of
+                  <br />
+                  Summer
+                  <br />
+                  Outfit
+                </h2>
+                <p className="text-gray-800/90 text-lg mb-6 drop-shadow">
+                  100+ Collections for your
+                  <br />
+                  outfit inspirations
+                  <br />
+                  in this summer
+                </p>
+                <Button
+                  size="lg"
+                  className="bg-black text-white hover:bg-gray-100 font-semibold px-8"
+                >
+                  Shop Now
+                </Button>
               </div>
             </div>
-          </div>
-          {/* sub images */}
-          <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-emerald-100 to-sky-100 ">
-            <img
-              src="/assets/images/img2.jpg"
-              className="w-full h-full object-cover"
-              alt="Sub Image 2"
-            />
-            <div className="absolute inset-0 bg-black/20"></div>
-            <div className="absolute bottom-3 left-3">
-              <span className="text-white font-medium text-sm">
-                Outdoor Active
-              </span>
-            </div>
-          </div>
+          </Card>
 
-          <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-blue-100 to-sky-100">
-            <img
-              src="/assets/images/img1.jpg"
-              className="w-full h-full object-cover"
-              alt="Sub Image 3"
-            />
-            <div className="absolute inset-0 bg-black/20"></div>
-            <div className="absolute bottom-3 left-3">
-              <span className="text-white font-medium text-sm">
-                Outdoor Active
-              </span>
-            </div>
+          {/* Right Side Cards */}
+          <div className="flex flex-col gap-6">
+            {/* Outdoor Active Card */}
+            <Card className="rounded-3xl overflow-hidden relative h-[300px] border-0 shadow-lg group cursor-pointer">
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-100 to-orange-200">
+                <img
+                  src="https://images.unsplash.com/photo-1571333250630-f0230c320b6d?w=600&h=400&fit=crop"
+                  alt="Outdoor Active"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <div className="absolute inset-0 bg-black/10"></div>
+              <div className="relative z-10 p-8 h-full flex flex-col justify-between">
+                <div></div>
+                <div>
+                  <h3 className="text-3xl font-bold text-white mb-2">
+                    Outdoor
+                    <br />
+                    Active
+                  </h3>
+                </div>
+              </div>
+            </Card>
+
+            {/* Casual Comfort Card */}
+            <Card className="rounded-3xl overflow-hidden relative h-[300px] border-0 shadow-lg group cursor-pointer">
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-blue-200">
+                <img
+                  src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&h=600&fit=crop"
+                  alt="Casual Comfort"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <div className="absolute inset-0 bg-black/10"></div>
+              <div className="relative z-10 p-8 h-full flex flex-col justify-between">
+                <div></div>
+                <div>
+                  <h3 className="text-3xl font-bold text-white mb-2">
+                    Casual
+                    <br />
+                    Comfort
+                  </h3>
+                </div>
+              </div>
+            </Card>
           </div>
         </div>
       </div>
