@@ -26,7 +26,7 @@ const ShopSidebarFilters = ({
           <Filter className="h-5 w-5" />
           <h2 className="text-lg font-semibold">Filters</h2>
 
-          <Badge variant="secondary">2</Badge>
+          <Badge variant="secondary">{selectedCategory.length}</Badge>
         </div>
 
         <div className="flex items-center gap-2">
@@ -36,6 +36,7 @@ const ShopSidebarFilters = ({
             variant="ghost"
             size="sm"
             className="text-gray-500 hover:text-gray-700"
+            onClick={() => setSelectedCategory([])}
           >
             <X className="h-4 w-4 mr-1" />
             Clear

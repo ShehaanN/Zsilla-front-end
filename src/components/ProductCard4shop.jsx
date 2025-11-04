@@ -5,7 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router";
 
-const ProductCard4shop = ({ selectedCategory }) => {
+const ProductCard4shop = ({
+  selectedCategory,
+  navCategoryId,
+  navCategoryname,
+}) => {
   const products = [
     {
       _id: "1",
@@ -88,11 +92,23 @@ const ProductCard4shop = ({ selectedCategory }) => {
       const filteredProducts = products.filter((product) =>
         selectedCategory.includes(product.categoryId)
       );
+
       setFilteredProducts(filteredProducts);
     } else {
       setFilteredProducts(products);
     }
   }, [selectedCategory]);
+
+  useEffect(() => {
+    if (navCategoryId) {
+      const filteredProducts = products.filter(
+        (product) => product.categoryId === navCategoryId
+      );
+      setFilteredProducts(filteredProducts);
+    } else {
+      setFilteredProducts(products);
+    }
+  }, [navCategoryId]);
 
   const calculateFinalPrice = (price, discount) => {
     return (price * (1 - discount / 100)).toFixed(2);
@@ -103,10 +119,17 @@ const ProductCard4shop = ({ selectedCategory }) => {
       {/* heading */}
       <div className="flex items-center justify-between mb-12">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col space-y-4">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mt-6">
-              All Products
+              {navCategoryname ? `${navCategoryname}` : "All Products"}
             </h2>
+            <p className="text-sm text-gray-600">
+              <Link to="/shop" className="mr-1 text-blue-400">
+                Shop
+              </Link>{" "}
+              <span className="mr-1"> /</span>
+              {navCategoryname?.toLowerCase()}
+            </p>
           </div>
         </div>
       </div>
