@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 const CasualInspirations = () => {
   return (
     <section className=" grid grid-cols-3 gap-4 px-4 lg:px-16 py-8">
@@ -7,9 +9,11 @@ const CasualInspirations = () => {
           Explore our collection of casual outfits that blend comfort and style.
         </p>
         <div className="mt-4 p-2 m-5">
-          <button className="w-full p-2 bg-white border-2 border-gray-600 text-gray-800 font-semibold cursor-pointer  px-4 rounded-full shadow-md hover:shadow-lg transition-shadow">
-            Shop Now
-          </button>
+          <Link to="/shop">
+            <button className="w-full p-2 bg-white border-2 border-gray-600 text-gray-800 font-semibold cursor-pointer  px-4 rounded-full shadow-md hover:shadow-lg transition-shadow">
+              Shop Now
+            </button>
+          </Link>
         </div>
       </div>
       <div className="rounded-3xl overflow-hidden relative h-[350px] border-0 shadow-lg group ">

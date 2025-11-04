@@ -8,12 +8,10 @@ import TrendingSection from "../components/TrendingSection";
 const HomePage = () => {
   return (
     <div className="min-h-screen bg-white">
-      <Navigation />
       <HeroSection />
       <CategoriesShow />
       <TrendingSection />
       <CasualInspirations />
-      <Footer />
     </div>
   );
 };

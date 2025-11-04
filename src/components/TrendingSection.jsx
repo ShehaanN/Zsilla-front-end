@@ -3,53 +3,124 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router";
 import { Card } from "@/components/ui/card";
+import { useState } from "react";
 
 const TrendingSection = () => {
   const trendingProducts = [
     {
       _id: "1",
-      name: "Stylish Summer Dress",
+      name: "Premium Cotton T-Shirt",
+      categoryId: "1",
       image:
-        "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&h=600&fit=crop",
-      price: 49.99,
+        "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&h=600&fit=crop",
+      price: 29.99,
       stock: 25,
       brand: "FashionCo",
       discount: 10,
     },
     {
       _id: "2",
-      name: "Casual Sneakers",
+      name: "Athletic Running Shoes",
+      categoryId: "4",
       image:
-        "https://images.unsplash.com/photo-1759542890353-35f5568c1c90?w=600&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=600&fit=crop",
       price: 79.99,
       stock: 25,
       brand: "ShoeBrand",
-      discount: 0,
+      discount: 5,
     },
     {
       _id: "3",
-      name: "Denim Jacket",
+      name: "Slim Fit Chino Pants",
+      categoryId: "2",
       image:
-        "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=600&h=600&fit=crop",
-      price: 89.99,
-      stock: 0,
-      brand: "DenimCo",
+        "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=600&h=600&fit=crop",
+      price: 59.99,
+      stock: 15,
+      brand: "PantsCo",
       discount: 15,
     },
     {
       _id: "4",
-      name: "Classic Wristwatch",
+      name: "Athletic Crew Socks",
+      categoryId: "3",
       image:
-        "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=600&h=600&fit=crop",
-      price: 199.99,
-      stock: 10,
-      brand: "WatchMakers",
+        "https://images.unsplash.com/photo-1586350977771-b3b0abd50c82?w=600&h=600&fit=crop",
+      price: 12.99,
+      stock: 30,
+      brand: "SockMakers",
       discount: 5,
+    },
+    {
+      _id: "5",
+      name: "Casual Sport Shorts",
+      categoryId: "5",
+      image:
+        "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=600&h=600&fit=crop",
+      price: 34.99,
+      stock: 20,
+      brand: "SportWear",
+      discount: 0,
+    },
+    {
+      _id: "6",
+      name: "Graphic Print T-Shirt",
+      categoryId: "1",
+      image:
+        "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&h=600&fit=crop",
+      price: 24.99,
+      stock: 18,
+      brand: "TeeStyle",
+      discount: 20,
+    },
+  ];
+
+  const [filteredProducts, setFilteredProducts] = useState(trendingProducts);
+
+  const categories = [
+    {
+      _id: "all",
+      name: "All",
+    },
+    {
+      _id: "1",
+      name: "T-Shirts",
+    },
+    {
+      _id: "2",
+      name: "Pants",
+    },
+    {
+      _id: "3",
+      name: "Socks",
+    },
+    {
+      _id: "4",
+      name: "Shoes",
+    },
+    {
+      _id: "5",
+      name: "Shorts",
     },
   ];
 
   const calculateFinalPrice = (price, discount) => {
     return (price * (1 - discount / 100)).toFixed(2);
+  };
+
+  const [selectedCategory, setSelectedCategory] = useState("all");
+
+  const filterHandleCategory = (categoryId) => {
+    if (categoryId === "all") {
+      setFilteredProducts(trendingProducts);
+      setSelectedCategory("all");
+    } else {
+      const filteredProducts = trendingProducts.filter(
+        (product) => product.categoryId === categoryId
+      );
+      setSelectedCategory(categoryId);
+      setFilteredProducts(filteredProducts);
+    }
   };
 
   return (
@@ -69,21 +140,31 @@ const TrendingSection = () => {
           </p>
         </div>
         {/* all products link */}
-        <Link to="/shop">
-          <Button variant="outline">
-            View All
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </Link>
+        <div className="flex items-center gap-4">
+          {categories.map((cate) => (
+            <Button
+              key={cate._id}
+              onClick={() => filterHandleCategory(cate._id)}
+              variant="outline"
+              className={`rounded-full text-lg ${
+                selectedCategory === cate._id
+                  ? "bg-gray-800 text-white hover:bg-gray-800 hover:text-white"
+                  : "text-gray-800 "
+              } `}
+            >
+              {cate.name}
+            </Button>
+          ))}
+        </div>
       </div>
 
       {/* Trending Products Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Product Card 1 */}
-        {trendingProducts.map((product) => (
+        {filteredProducts?.map((product) => (
           <Card
             key={product._id}
-            className="rounded-2xl overflow-hidden border-0 shadow-md cursor-pointer hover:shadow-lg transition-all duration-300 group bg-white"
+            className="rounded-2xl overflow-hidden border-0 shadow-md cursor-pointer hover:shadow-lg transition-all   duration-300 group bg-white"
           >
             {/* image */}
             <div className="relative aspect-square rounded-2xl overflow-hidden bg-gray-100">
@@ -124,12 +205,12 @@ const TrendingSection = () => {
                         ${calculateFinalPrice(product.price, product.discount)}
                       </span>
                       <span className="text-sm text-gray-500 line-through">
-                        ${product.price.toFixed(2)}
+                        ${product.price?.toFixed(2)}
                       </span>
                     </>
                   ) : (
                     <span className="text-lg font-bold text-gray-900">
-                      ${product.price.toFixed(2)}
+                      ${product.price?.toFixed(2)}
                     </span>
                   )}
                 </div>

@@ -7,7 +7,7 @@ import { useState } from "react";
 const Navigation = () => {
   const navigationItems = [
     { path: "/shop/shoes", label: "Shoes" },
-    { path: "/shop/tshirts", label: "T-Shirts" },
+    { path: "/shop/t-shirts", label: "T-Shirts" },
     { path: "/shop/shorts", label: "Shorts" },
     { path: "/shop/pants", label: "Pants" },
     { path: "/shop/socks", label: "Socks" },
