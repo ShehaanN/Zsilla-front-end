@@ -1,6 +1,9 @@
+import CasualInspirations from "../components/CasualInspirations";
 import CategoriesShow from "../components/CategoriesShow";
+import Footer from "../components/Footer";
 import HeroSection from "../components/HeroSection";
 import Navigation from "../components/Navigation";
+import TrendingSection from "../components/TrendingSection";
 
 const HomePage = () => {
   return (
@@ -8,6 +11,9 @@ const HomePage = () => {
       <Navigation />
       <HeroSection />
       <CategoriesShow />
+      <TrendingSection />
+      <CasualInspirations />
+      <Footer />
     </div>
   );
 };
