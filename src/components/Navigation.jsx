@@ -1,5 +1,5 @@
 import { Heart, Search, ShoppingBag } from "lucide-react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router";
 import { Button } from "@/components/ui/button";
 import ProductSearchForm from "./ProductSearchForm";
 import { useState } from "react";
@@ -20,20 +20,20 @@ const Navigation = () => {
       <div>
         <div className="flex items-center justify-between h-16">
           {/* logo */}
-          <Link to="/" className="text-2xl font-bold">
+          <NavLink to="/" className="text-2xl font-bold">
             Zsilla
-          </Link>
+          </NavLink>
           {/* desktop navigation */}
 
           <nav className="hidden md:flex space-x-8">
             {navigationItems.map((item) => (
-              <Link
+              <NavLink
                 key={item.path}
                 to={item.path}
                 className="font-medium hover:text-gray-600 transition-colors duration-200"
               >
                 {item.label}
-              </Link>
+              </NavLink>
             ))}
           </nav>
 
