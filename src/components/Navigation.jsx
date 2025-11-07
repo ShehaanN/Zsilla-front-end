@@ -1,5 +1,5 @@
 import { Heart, Search, ShoppingBag } from "lucide-react";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 import { Button } from "@/components/ui/button";
 import ProductSearchForm from "./ProductSearchForm";
 import { useState } from "react";
@@ -50,7 +50,9 @@ const Navigation = () => {
             <Heart size={20} />
 
             {/* cart icon */}
-            <ShoppingBag size={20} />
+            <Link to="/shop/cart">
+              <ShoppingBag size={20} />
+            </Link>
 
             {/* auth section */}
             <Button variant="outline">Sign In</Button>
