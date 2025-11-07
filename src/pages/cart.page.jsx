@@ -1,4 +1,4 @@
-import { ArrowLeft, ShoppingBag } from "lucide-react";
+import { ArrowLeft, LogIn, ShoppingBag } from "lucide-react";
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import CartItem from "../components/CartItem";
 
 const CartPage = () => {
-  const isSignedIn = false;
+  const isSignedIn = true;
   const cart = [
     {
       _id: "1",
@@ -36,6 +36,38 @@ const CartPage = () => {
       discount: 5,
     },
   ];
+
+  const cartSummary = {
+    subtotal: cart.reduce((total, item) => {
+      try {
+        const price = parseFloat(item.price);
+        const discount = parseFloat(item.discount);
+        const quantity = parseInt(item.quantity);
+
+        const lastprice = discount > 0 ? price * (1 - discount / 100) : price;
+
+        return total + lastprice * quantity;
+      } catch (error) {
+        console.error(error);
+      }
+    }, 0),
+
+    itemCount: cart.reduce((total, item) => {
+      try {
+        return total + (parseInt(item.quantity) || 1);
+      } catch (error) {
+        console.error(error);
+      }
+    }, 0),
+
+    savings: cart.reduce((total, item) => {
+      try {
+        return total + item.price * (item.discount / 100) * item.quantity;
+      } catch (error) {
+        console.error(error);
+      }
+    }, 0),
+  };
 
   if (!cart || cart.length === 0) {
     return (
@@ -124,7 +156,7 @@ const CartPage = () => {
 
               <div className="space-y-6">
                 {cart.map((item) => (
-                  <div key={item.id}>
+                  <div key={item._id}>
                     <CartItem item={item} />
                   </div>
                 ))}
@@ -133,7 +165,61 @@ const CartPage = () => {
           </div>
 
           {/* Order Summary */}
-          <div></div>
+          <div className="lg:col-span-1">
+            <Card className="p-6 sticky top-4">
+              <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                Order Summary
+              </h2>
+
+              <div className="space-y-4">
+                <div className="flex justify-between text-gray-600">
+                  <span>Subtotal ({cartSummary.itemCount} items)</span>
+                  <span>${cartSummary.subtotal.toFixed(2)}</span>
+                </div>
+
+                {cartSummary.savings > 0 && (
+                  <div className="flex justify-between text-green-600">
+                    <span>You saved</span>
+                    <span>(-${cartSummary.savings.toFixed(2)})</span>
+                  </div>
+                )}
+
+                <div className="flex justify-between text-gray-600">
+                  <span>Shipping</span>
+                  <span className="text-green-600 font-medium">FREE</span>
+                </div>
+
+                <hr className="border-gray-200" />
+
+                <div className="flex justify-between text-lg font-bold text-gray-900">
+                  <span>Total</span>
+                  <span>${cartSummary.subtotal.toFixed(2)}</span>
+                </div>
+              </div>
+
+              {/* checkout button*/}
+              {isSignedIn ? (
+                <Button
+                  size="lg"
+                  className="w-full mt-6"
+                  disabled={cart.length === 0}
+                >
+                  Proceed to Checkout
+                </Button>
+              ) : (
+                <div className="mt-6 space-y-3">
+                  <Button
+                    size="lg"
+                    className="w-full"
+                    disabled={cart.length === 0}
+                  >
+                    <LogIn className="h-5 w-5 mr-2" />
+                    Sign In to Checkout
+                  </Button>
+                </div>
+              )}
+            </Card>
+          </div>
         </div>
       </div>
     </div>

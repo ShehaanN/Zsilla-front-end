@@ -60,9 +60,9 @@ const ProductCard4shop = ({
         </div>
       </div>
 
-      {/* Trending Products Grid */}
+      {/* Products Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Product Card 1 */}
+        {/* Product Card */}
         {filteredProducts?.map((product) => (
           <Card
             key={product._id}
