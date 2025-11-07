@@ -1,8 +1,9 @@
-import { Heart, Minus, Plus, ShoppingCart } from "lucide-react";
+import { Edit3, Heart, Minus, Plus, ShoppingCart, Star } from "lucide-react";
 import { useState } from "react";
 import { Link, useParams } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const ProductDetailsPage = () => {
   const { id } = useParams();
@@ -194,6 +195,22 @@ const ProductDetailsPage = () => {
     }
   };
 
+  const calculateAverageRating = (reviews) => {
+    if (!reviews || reviews.length === 0) return 0;
+    const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
+    return (sum / reviews.length).toFixed(1);
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  const averageRating = calculateAverageRating(product.reviews || []);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -346,6 +363,124 @@ const ProductDetailsPage = () => {
                 <Heart className={`h-5 w-5 `} />
               </Button>
             </div>
+          </div>
+        </div>
+
+        {/* product reviews */}
+
+        <div className="space-y-6">
+          {/* Review summary */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>Customer Reviews</CardTitle>
+                <Button variant="outline" size="sm">
+                  <Edit3 className="mr-2 h-4 w-4" />
+                  Write a Review
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center gap-6">
+                <div className="text-center">
+                  <div className="text-3xl font-bold">{averageRating}</div>
+                  <div className="flex items-center justify-center gap-1 mb-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`h-4 w-4 ${
+                          i < Math.floor(averageRating)
+                            ? "fill-yellow-400 text-yellow-400"
+                            : "text-gray-300"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    {product.reviews.length} reviews
+                  </div>
+                </div>
+
+                {/* Rating Distribution */}
+                <div className="flex-1">
+                  {[5, 4, 3, 2, 1].map((stars) => {
+                    const count = product.reviews.filter(
+                      (review) => review.rating === stars
+                    ).length;
+                    const percentage =
+                      product.reviews.length > 0
+                        ? (count / product.reviews.length) * 100
+                        : 0;
+
+                    return (
+                      <div key={stars} className="flex items-center gap-3 mb-1">
+                        <span className="text-sm w-8">{stars}★</span>
+                        <div className="flex-1 bg-gray-200 rounded-full h-2">
+                          <div
+                            className="bg-blue-400 h-2 rounded-full"
+                            style={{ width: `${percentage}%` }}
+                          />
+                        </div>
+                        <span className="text-sm text-gray-600 w-8">
+                          {count}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* All Reviews */}
+          <div className="space-y-4">
+            {/* Review Card */}
+            {product.reviews.length > 0 ? (
+              product.reviews.map((review) => (
+                <div
+                  key={review._id}
+                  className="border rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow"
+                >
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Anonymous</h4>
+                      <div className="flex items-center gap-1 mt-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`h-4 w-4 ${
+                              i < review.rating
+                                ? "fill-yellow-400 text-yellow-400"
+                                : "text-gray-300"
+                            }`}
+                          />
+                        ))}
+                        <span className="text-sm text-gray-600 ml-2">
+                          {review.rating}/5
+                        </span>
+                      </div>
+                    </div>
+                    <span className="text-sm text-gray-500">
+                      {formatDate(review.createdAt)}
+                    </span>
+                  </div>
+
+                  <div>
+                    <p className="text-gray-600 text-sm">{review.comment}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <Card>
+                <CardContent className="text-center py-8">
+                  <p className="text-gray-600 mb-4">No reviews yet.</p>
+                  <Button>
+                    <Edit3 className="mr-2 h-4 w-4" />
+                    Write the first review
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </div>
