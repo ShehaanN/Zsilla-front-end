@@ -4,41 +4,32 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import CartItem from "../components/CartItem";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  clearCart,
+  removeFromCart,
+  updateQuantity,
+} from "../lib/features/cartSlice";
 
 const CartPage = () => {
+  const dispatch = useDispatch();
+  const { items, totalQuantity } = useSelector((state) => state.cart);
   const isSignedIn = true;
-  const cart = [
-    {
-      _id: "1",
-      name: "Premium Cotton T-Shirt",
-      categoryId: "1",
-      image:
-        "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&h=600&fit=crop",
-      price: 29.99,
-      size: "S",
-      stock: 25,
-      brand: "FashionCo",
-      quantity: 2,
 
-      discount: 10,
-    },
-    {
-      _id: "2",
-      name: "Athletic Running Shoes",
-      categoryId: "4",
-      image:
-        "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=600&fit=crop",
-      price: 79.99,
-      size: "12",
-      stock: 25,
-      brand: "ShoeBrand",
-      quantity: 1,
-      discount: 5,
-    },
-  ];
+  const handleQuantityChange = (productId, size, newQuantity) => {
+    dispatch(updateQuantity({ id: productId, size, quantity: newQuantity }));
+  };
+
+  const handleRemoveItem = (productId, size) => {
+    dispatch(removeFromCart({ id: productId, size }));
+  };
+
+  const handleClearCart = () => {
+    dispatch(clearCart());
+  };
 
   const cartSummary = {
-    subtotal: cart.reduce((total, item) => {
+    subtotal: items.reduce((total, item) => {
       try {
         const price = parseFloat(item.price);
         const discount = parseFloat(item.discount);
@@ -52,7 +43,7 @@ const CartPage = () => {
       }
     }, 0),
 
-    itemCount: cart.reduce((total, item) => {
+    itemCount: items.reduce((total, item) => {
       try {
         return total + (parseInt(item.quantity) || 1);
       } catch (error) {
@@ -60,7 +51,7 @@ const CartPage = () => {
       }
     }, 0),
 
-    savings: cart.reduce((total, item) => {
+    savings: items.reduce((total, item) => {
       try {
         return total + item.price * (item.discount / 100) * item.quantity;
       } catch (error) {
@@ -69,7 +60,7 @@ const CartPage = () => {
     }, 0),
   };
 
-  if (!cart || cart.length === 0) {
+  if (!items || items.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-6xl mx-auto px-4 py-8">
@@ -135,9 +126,10 @@ const CartPage = () => {
               </Link>
             </Button>
 
-            {cart.length > 0 && (
+            {items.length > 0 && (
               <Button
                 variant="outline"
+                onClick={handleClearCart}
                 className="text-red-600 hover:text-red-700 hover:bg-red-50"
               >
                 Clear Cart
@@ -155,9 +147,13 @@ const CartPage = () => {
               </h2>
 
               <div className="space-y-6">
-                {cart.map((item) => (
+                {items.map((item) => (
                   <div key={item._id}>
-                    <CartItem item={item} />
+                    <CartItem
+                      item={item}
+                      handleQuantityChange={handleQuantityChange}
+                      handleRemoveItem={handleRemoveItem}
+                    />
                   </div>
                 ))}
               </div>
@@ -173,7 +169,7 @@ const CartPage = () => {
 
               <div className="space-y-4">
                 <div className="flex justify-between text-gray-600">
-                  <span>Subtotal ({cartSummary.itemCount} items)</span>
+                  <span>Subtotal ({totalQuantity} items)</span>
                   <span>${cartSummary.subtotal.toFixed(2)}</span>
                 </div>
 
@@ -202,7 +198,7 @@ const CartPage = () => {
                 <Button
                   size="lg"
                   className="w-full mt-6"
-                  disabled={cart.length === 0}
+                  disabled={items.length === 0}
                 >
                   Proceed to Checkout
                 </Button>
@@ -211,7 +207,7 @@ const CartPage = () => {
                   <Button
                     size="lg"
                     className="w-full"
-                    disabled={cart.length === 0}
+                    disabled={items.length === 0}
                   >
                     <LogIn className="h-5 w-5 mr-2" />
                     Sign In to Checkout

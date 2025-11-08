@@ -1,8 +1,10 @@
 import { Heart, Search, ShoppingBag } from "lucide-react";
 import { Link, NavLink } from "react-router";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import ProductSearchForm from "./ProductSearchForm";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const Navigation = () => {
   const navigationItems = [
@@ -14,6 +16,8 @@ const Navigation = () => {
   ];
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  //get the cart data from store
+  const totalQuantity = useSelector((state) => state.cart.totalQuantity);
 
   return (
     <header className="bg-white border-b border-gray-200 px-4 lg:px-16 ">
@@ -40,18 +44,24 @@ const Navigation = () => {
           {/* icons */}
           <div className="flex items-center space-x-4">
             {/* search icon */}
-            <button
-              className="p-1 rounded-full cursor-pointer transition-colors duration-200"
+            <Button
+              variant="ghost"
+              className=" rounded-full cursor-pointer "
               onClick={() => setIsSearchOpen(!isSearchOpen)}
             >
               <Search size={20} />
-            </button>
+            </Button>
             {/* wishlist icon */}
             <Heart size={20} />
 
             {/* cart icon */}
-            <Link to="/shop/cart">
+            <Link to="/shop/cart" className=" relative cursor-pointer">
               <ShoppingBag size={20} />
+              {totalQuantity > 0 && (
+                <Badge className="absolute -top-2 -right-2 text-xs rounded-full text-white  w-5">
+                  {totalQuantity}
+                </Badge>
+              )}
             </Link>
 
             {/* auth section */}
