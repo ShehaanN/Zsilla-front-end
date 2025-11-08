@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Heart, Minus, Plus, Trash2 } from "lucide-react";
 
-const CartItem = ({ item }) => {
+const CartItem = ({ item, handleQuantityChange, handleRemoveItem }) => {
   const discountedPrice = item.price * (1 - item.discount / 100);
 
   return (
@@ -46,7 +46,7 @@ const CartItem = ({ item }) => {
                 <p className="text-sm text-gray-600 mt-1">by {item.brand}</p>
               )}
 
-              {/* Size & Color  */}
+              {/* Size */}
               {item?.size && (
                 <div className="flex gap-2 text-sm text-gray-600 mt-1">
                   {item.size && (
@@ -85,6 +85,13 @@ const CartItem = ({ item }) => {
                   <Button
                     variant="ghost"
                     size="sm"
+                    onClick={() =>
+                      handleQuantityChange(
+                        item._id,
+                        item.size,
+                        item.quantity - 1
+                      )
+                    }
                     className="h-8 w-8 p-0 hover:bg-gray-100 disabled:opacity-50"
                   >
                     <Minus className="h-4 w-4" />
@@ -97,6 +104,13 @@ const CartItem = ({ item }) => {
                   <Button
                     variant="ghost"
                     size="sm"
+                    onClick={() =>
+                      handleQuantityChange(
+                        item._id,
+                        item.size,
+                        item.quantity + 1
+                      )
+                    }
                     className="h-8 w-8 p-0 hover:bg-gray-100 disabled:opacity-50"
                   >
                     <Plus className="h-4 w-4" />
@@ -114,6 +128,7 @@ const CartItem = ({ item }) => {
               <div className="flex items-center space-x-2">
                 <Button
                   variant="ghost"
+                  onClick={() => handleRemoveItem(item._id, item.size)}
                   size="sm"
                   className="text-gray-500 hover:text-red-600 hover:bg-red-50 disabled:opacity-50"
                 >
@@ -137,7 +152,7 @@ const CartItem = ({ item }) => {
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-600">Subtotal:</span>
                 <span className="text-lg font-bold text-gray-900">
-                  {(discountedPrice * item.quantity).toFixed(2)}
+                  $ {(discountedPrice * item.quantity).toFixed(2)}
                 </span>
               </div>
               {item.discount > 0 && item.quantity > 1 && (

@@ -3,10 +3,22 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router";
 import { Card } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../lib/features/cartSlice";
 
 const TrendingSection = () => {
-  const trendingProducts = [
+  const products = [
     {
       _id: "1",
       name: "Premium Cotton T-Shirt",
@@ -14,9 +26,11 @@ const TrendingSection = () => {
       image:
         "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&h=600&fit=crop",
       price: 29.99,
+      sizes: ["S", "M", "L", "XL", "XXL", "XS"],
       stock: 25,
       brand: "FashionCo",
       discount: 10,
+      featured: true,
     },
     {
       _id: "2",
@@ -25,9 +39,11 @@ const TrendingSection = () => {
       image:
         "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=600&fit=crop",
       price: 79.99,
+      sizes: ["8", "9", "10", "11", "12"],
       stock: 25,
       brand: "ShoeBrand",
       discount: 5,
+      featured: true,
     },
     {
       _id: "3",
@@ -36,9 +52,11 @@ const TrendingSection = () => {
       image:
         "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=600&h=600&fit=crop",
       price: 59.99,
+      sizes: ["30", "32", "34", "36", "38"],
       stock: 15,
       brand: "PantsCo",
       discount: 15,
+      featured: true,
     },
     {
       _id: "4",
@@ -47,9 +65,11 @@ const TrendingSection = () => {
       image:
         "https://images.unsplash.com/photo-1586350977771-b3b0abd50c82?w=600&h=600&fit=crop",
       price: 12.99,
+      sizes: ["M", "L", "XL"],
       stock: 30,
       brand: "SockMakers",
       discount: 5,
+      featured: true,
     },
     {
       _id: "5",
@@ -58,9 +78,11 @@ const TrendingSection = () => {
       image:
         "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=600&h=600&fit=crop",
       price: 34.99,
+      sizes: ["S", "M", "L", "XL"],
       stock: 20,
       brand: "SportWear",
       discount: 0,
+      featured: false,
     },
     {
       _id: "6",
@@ -70,10 +92,14 @@ const TrendingSection = () => {
         "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&h=600&fit=crop",
       price: 24.99,
       stock: 18,
+      sizes: ["S", "M", "L", "XL", "XXL"],
       brand: "TeeStyle",
       discount: 20,
+      featured: false,
     },
   ];
+
+  const trendingProducts = products.filter((item) => item.featured === true);
 
   const [filteredProducts, setFilteredProducts] = useState(trendingProducts);
 
@@ -109,6 +135,8 @@ const TrendingSection = () => {
   };
 
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedSize, setSelectedSize] = useState("");
+  const dispatch = useDispatch();
 
   const filterHandleCategory = (categoryId) => {
     if (categoryId === "all") {
@@ -120,6 +148,18 @@ const TrendingSection = () => {
       );
       setSelectedCategory(categoryId);
       setFilteredProducts(filteredProducts);
+    }
+  };
+
+  const handleAddToCart = (product) => {
+    if (product.stock > 0) {
+      const productData = {
+        ...product,
+        size: selectedSize,
+        quantity: 1,
+      };
+      dispatch(addToCart(productData));
+      console.log(`Added ${product.name} to cart`);
     }
   };
 
@@ -217,10 +257,74 @@ const TrendingSection = () => {
               </div>
 
               {/* action */}
-              <Button className="w-full py-5 ">
-                <ShoppingCart className="mr-2 h-4 w-4" />
-                {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    className="w-full py-5 mt-3"
+                    disabled={product.stock === 0}
+                    onClick={() => setSelectedSize(product.sizes[0])}
+                  >
+                    <ShoppingCart className="mr-2 h-4 w-4" />
+                    {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Select Options</DialogTitle>
+                  </DialogHeader>
+                  <div>
+                    <div className="mb-4">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-32 object-cover rounded-lg mb-3"
+                      />
+                      <h4 className="font-medium">{product.name}</h4>
+                      <p className="text-lg font-bold text-gray-900">
+                        $
+                        {product.discount > 0
+                          ? calculateFinalPrice(product.price, product.discount)
+                          : product.price.toFixed(2)}
+                      </p>
+                    </div>
+
+                    {product.sizes && product.sizes.length > 0 && (
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium mb-2">
+                          Size *
+                        </label>
+                        <div className="flex flex-wrap gap-2">
+                          {product.sizes.map((size) => (
+                            <button
+                              key={size}
+                              onClick={() => setSelectedSize(size)}
+                              className={`px-3 py-2 border rounded-md text-sm font-medium transition-colors ${
+                                selectedSize === size
+                                  ? "border-blue-500 bg-blue-50 text-blue-700"
+                                  : "border-gray-300 hover:border-gray-400"
+                              }`}
+                            >
+                              {size}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <DialogFooter className="grid grid-cols-2 gap-4">
+                    <DialogClose asChild>
+                      <Button variant="outline">Cancel</Button>
+                    </DialogClose>
+                    <Button
+                      type="button"
+                      onClick={() => handleAddToCart(product)}
+                      disabled={product.stock === 0}
+                    >
+                      Add to Cart
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
           </Card>
         ))}

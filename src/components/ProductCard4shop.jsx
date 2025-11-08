@@ -3,7 +3,19 @@ import { Card } from "@/components/ui/card";
 import { Eye, Heart, ShoppingCart, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Link } from "react-router";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../lib/features/cartSlice";
 
 const ProductCard4shop = ({
   selectedCategory,
@@ -12,6 +24,8 @@ const ProductCard4shop = ({
   products,
 }) => {
   const [filteredProducts, setFilteredProducts] = useState(products);
+  const [selectedSize, setSelectedSize] = useState("");
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (selectedCategory.length > 0) {
@@ -38,6 +52,18 @@ const ProductCard4shop = ({
 
   const calculateFinalPrice = (price, discount) => {
     return (price * (1 - discount / 100)).toFixed(2);
+  };
+
+  const handleAddToCart = (product) => {
+    if (product.stock > 0) {
+      const productData = {
+        ...product,
+        size: selectedSize,
+        quantity: 1,
+      };
+      dispatch(addToCart(productData));
+      console.log(`Added ${product.name} to cart`);
+    }
   };
 
   return (
@@ -168,10 +194,75 @@ const ProductCard4shop = ({
               </div>
 
               {/* action */}
-              <Button className="w-full py-5 ">
-                <ShoppingCart className="mr-2 h-4 w-4" />
-                {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
-              </Button>
+
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    className="w-full py-5 mt-3"
+                    disabled={product.stock === 0}
+                    onClick={() => setSelectedSize(product.sizes[0])}
+                  >
+                    <ShoppingCart className="mr-2 h-4 w-4" />
+                    {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Select Options</DialogTitle>
+                  </DialogHeader>
+                  <div>
+                    <div className="mb-4">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-32 object-cover rounded-lg mb-3"
+                      />
+                      <h4 className="font-medium">{product.name}</h4>
+                      <p className="text-lg font-bold text-gray-900">
+                        $
+                        {product.discount > 0
+                          ? calculateFinalPrice(product.price, product.discount)
+                          : product.price.toFixed(2)}
+                      </p>
+                    </div>
+
+                    {product.sizes && product.sizes.length > 0 && (
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium mb-2">
+                          Size *
+                        </label>
+                        <div className="flex flex-wrap gap-2">
+                          {product.sizes.map((size) => (
+                            <button
+                              key={size}
+                              onClick={() => setSelectedSize(size)}
+                              className={`px-3 py-2 border rounded-md text-sm font-medium transition-colors ${
+                                selectedSize === size
+                                  ? "border-blue-500 bg-blue-50 text-blue-700"
+                                  : "border-gray-300 hover:border-gray-400"
+                              }`}
+                            >
+                              {size}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <DialogFooter className="grid grid-cols-2 gap-4">
+                    <DialogClose asChild>
+                      <Button variant="outline">Cancel</Button>
+                    </DialogClose>
+                    <Button
+                      type="button"
+                      onClick={() => handleAddToCart(product)}
+                      disabled={product.stock === 0}
+                    >
+                      Add to Cart
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
           </Card>
         ))}
