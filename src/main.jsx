@@ -7,21 +7,25 @@ import ShopPage from "./pages/shop.page.jsx";
 import RootLayout from "./layouts/root.layout.jsx";
 import ProductDetailsPage from "./pages/productDetails.page.jsx";
 import CartPage from "./pages/cart.page.jsx";
+import { Provider } from "react-redux";
+import store from "./lib/store.js";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route element={<RootLayout />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/shop">
-            <Route index element={<ShopPage />} />
-            <Route path=":category" element={<ShopPage />} />
-            <Route path="product/:id" element={<ProductDetailsPage />} />
-            <Route path="cart" element={<CartPage />} />
+    <Provider store={store}>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<RootLayout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/shop">
+              <Route index element={<ShopPage />} />
+              <Route path=":category" element={<ShopPage />} />
+              <Route path="product/:id" element={<ProductDetailsPage />} />
+              <Route path="cart" element={<CartPage />} />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   </StrictMode>
 );
