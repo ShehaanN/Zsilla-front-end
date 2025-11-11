@@ -16,15 +16,15 @@ const cartSlice = createSlice({
       );
 
       if (existingItem) {
-        existingItem.quantity += 1;
+        existingItem.quantity += newItem.quantity;
       } else {
         state.items.push({
           ...newItem,
-          quantity: 1,
+          quantity: newItem.quantity,
         });
       }
 
-      state.totalQuantity += 1;
+      state.totalQuantity += newItem.quantity;
     },
     removeFromCart: (state, action) => {
       const { id, size } = action.payload;
