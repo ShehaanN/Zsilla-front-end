@@ -27,28 +27,51 @@ const ProductCard4shop = ({
   const [selectedSize, setSelectedSize] = useState("");
   const dispatch = useDispatch();
 
+  // useEffect(() => {
+  //   if (navCategoryId) {
+  //     const filteredProducts = products.filter(
+  //       (product) => product.categoryId === navCategoryId
+  //     );
+  //     setFilteredProducts(filteredProducts);
+  //   } else {
+  //     setFilteredProducts(products);
+  //   }
+  // }, [navCategoryId, products]);
+
+  // useEffect(() => {
+  //   if (selectedCategory.length > 0) {
+  //     const filteredProducts = products.filter((product) =>
+  //       selectedCategory.includes(product.categoryId)
+  //     );
+
+  //     setFilteredProducts(filteredProducts);
+  //   } else {
+  //     setFilteredProducts(products);
+  //   }
+  // }, [selectedCategory, products]);
+
   useEffect(() => {
+    let filtered = products;
+
+    // Sidebar category selection
     if (selectedCategory.length > 0) {
-      const filteredProducts = products.filter((product) =>
+      filtered = products.filter((product) =>
         selectedCategory.includes(product.categoryId)
       );
-
-      setFilteredProducts(filteredProducts);
-    } else {
-      setFilteredProducts(products);
     }
-  }, [selectedCategory]);
-
-  useEffect(() => {
-    if (navCategoryId) {
-      const filteredProducts = products.filter(
+    // Navigation category
+    else if (navCategoryId) {
+      filtered = products.filter(
         (product) => product.categoryId === navCategoryId
       );
-      setFilteredProducts(filteredProducts);
-    } else {
-      setFilteredProducts(products);
     }
-  }, [navCategoryId]);
+    // Show all products
+    else {
+      filtered = products;
+    }
+
+    setFilteredProducts(filtered);
+  }, [products, selectedCategory, navCategoryId]);
 
   const calculateFinalPrice = (price, discount) => {
     return (price * (1 - discount / 100)).toFixed(2);
