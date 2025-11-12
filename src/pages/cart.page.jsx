@@ -196,11 +196,12 @@ const CartPage = () => {
               {/* checkout button*/}
               {isSignedIn ? (
                 <Button
+                  asChild
                   size="lg"
                   className="w-full mt-6"
                   disabled={items.length === 0}
                 >
-                  Proceed to Checkout
+                  <Link to="/checkout">Proceed to Checkout</Link>
                 </Button>
               ) : (
                 <div className="mt-6 space-y-3">
