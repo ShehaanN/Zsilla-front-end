@@ -4,12 +4,15 @@ import { Link, useParams } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../lib/features/cartSlice";
 
 const ProductDetailsPage = () => {
   const { id } = useParams();
 
   const [selectedSize, setSelectedSize] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const dispatch = useDispatch();
 
   const products = [
     {
@@ -39,6 +42,7 @@ const ProductDetailsPage = () => {
       stock: 25,
       brand: "FashionCo",
       discount: 10,
+      featured: true,
     },
     {
       _id: "2",
@@ -73,6 +77,7 @@ const ProductDetailsPage = () => {
       stock: 25,
       brand: "ShoeBrand",
       discount: 5,
+      featured: true,
     },
     {
       _id: "3",
@@ -107,6 +112,7 @@ const ProductDetailsPage = () => {
       stock: 15,
       brand: "PantsCo",
       discount: 15,
+      featured: true,
     },
     {
       _id: "4",
@@ -135,6 +141,7 @@ const ProductDetailsPage = () => {
       stock: 30,
       brand: "SockMakers",
       discount: 5,
+      featured: true,
     },
     {
       _id: "5",
@@ -150,6 +157,7 @@ const ProductDetailsPage = () => {
       stock: 20,
       brand: "SportWear",
       discount: 0,
+      featured: false,
     },
     {
       _id: "6",
@@ -178,6 +186,7 @@ const ProductDetailsPage = () => {
       sizes: ["S", "M", "L", "XL", "XXL"],
       brand: "TeeStyle",
       discount: 20,
+      featured: false,
     },
   ];
 
@@ -210,6 +219,18 @@ const ProductDetailsPage = () => {
   };
 
   const averageRating = calculateAverageRating(product.reviews || []);
+
+  const handleAddToCart = (product) => {
+    if (product.stock > 0) {
+      const productData = {
+        ...product,
+        size: selectedSize,
+        quantity: quantity,
+      };
+      dispatch(addToCart(productData));
+      console.log(`Added ${product.name} to cart`);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -329,22 +350,11 @@ const ProductDetailsPage = () => {
             {/* Action Buttons */}
             <div className="flex gap-3">
               <Button
-                // onClick={handleAddToCart}
-                // disabled={product.stock === 0 || isAddingToCart}
+                onClick={() => handleAddToCart(product)}
+                disabled={product.stock === 0}
                 className="flex-1"
                 size="lg"
               >
-                {/* {isAddingToCart ? (
-                  <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-2" />
-                    Adding...
-                  </>
-                ) : (
-                  <>
-                    <ShoppingCart className="mr-2 h-5 w-5" />
-                    Add to Cart
-                  </>
-                )} */}
                 <ShoppingCart className="mr-2 h-5 w-5" />
                 Add to Cart
               </Button>
@@ -352,12 +362,6 @@ const ProductDetailsPage = () => {
               <Button
                 variant="outline"
                 size="lg"
-                // onClick={handleWishlistToggle}
-                // disabled={
-                //   isAddingToWishlist ||
-                //   isRemovingFromWishlist ||
-                //   wishlistLoading
-                // }
                 className={`px-4 hover:bg-gray-50 `}
               >
                 <Heart className={`h-5 w-5 `} />
