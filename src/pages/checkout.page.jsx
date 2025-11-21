@@ -28,7 +28,7 @@ const CheckoutPage = () => {
     subtotal: cart.reduce((total, item) => {
       try {
         const price = parseFloat(item.price);
-        const discount = 10;
+        const discount = item.discount ? parseFloat(item.discount) : 0;
         const quantity = parseInt(item.quantity);
 
         const lastprice = discount > 0 ? price * (1 - discount / 100) : price;
@@ -69,7 +69,36 @@ const CheckoutPage = () => {
     setShippingAddress(addressData);
   };
 
-  const handlePlaceOrder = () => {};
+  // console.log("cart", cart);
+
+  const handlePlaceOrder = async () => {
+    setIsProcessingOrder(true);
+
+    try {
+      const orderData = {
+        items: cart.map((item) => ({
+          productId: item._id,
+          quantity: item.quantity,
+          price:
+            item.discount > 0
+              ? item.price * (1 - item.discount / 100)
+              : item.price,
+          size: item.size || null,
+        })),
+        shippingAddress,
+        paymentMethod,
+        totalAmount: total,
+        orderStatus: paymentMethod === "COD" ? "CONFIRMED" : "PENDING",
+        paymentStatus: paymentMethod === "COD" ? "COD_PENDING" : "PENDING",
+      };
+
+      console.log("Placing order with data:", orderData);
+    } catch (error) {
+      console.error("Error placing order:", error);
+    } finally {
+      setIsProcessingOrder(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -124,38 +153,6 @@ const CheckoutPage = () => {
               </div>
 
               <ShippingAddressForm onSubmit={handleShippingAddressSubmit} />
-            </Card>
-
-            {/* DELIVERY OPTIONS */}
-            <Card className="p-6">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                  <Truck className="h-5 w-5 text-black" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-900">
-                    Delivery Options
-                  </h2>
-                  <p className="text-sm text-gray-600">
-                    Select the delivery method that best suits your schedule.
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="border-2 border-blue-500 bg-blue-50 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-semibold text-gray-900">
-                      Standard Delivery
-                    </h3>
-                    <Badge variant="secondary">Selected</Badge>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-2">
-                    5-7 business days
-                  </p>
-                  <p className="font-bold text-green-600">FREE</p>
-                </div>
-              </div>
             </Card>
 
             {/* Payment methods*/}
@@ -276,7 +273,10 @@ const CheckoutPage = () => {
                   const discountedPrice =
                     item.price * (1 - item.discount / 100);
                   return (
-                    <Card className="p-3 bg-white border border-gray-200 hover:shadow-sm transition-shadow">
+                    <Card
+                      key={item._id}
+                      className="p-3 bg-white border border-gray-200 hover:shadow-sm transition-shadow"
+                    >
                       <div className="flex items-center space-x-3">
                         <div className="relative">
                           <img
