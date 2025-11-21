@@ -10,6 +10,8 @@ import CartPage from "./pages/cart.page.jsx";
 import { Provider } from "react-redux";
 import store from "./lib/store.js";
 import CheckoutPage from "./pages/checkout.page.jsx";
+import OrderSuccessPage from "./pages/ordersuccess.page";
+import MyOrderPage from "./pages/myorder.page";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -25,6 +27,8 @@ createRoot(document.getElementById("root")).render(
               <Route path="cart" element={<CartPage />} />
             </Route>
             <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/order-success" element={<OrderSuccessPage />} />
+            <Route path="/orders" element={<MyOrderPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
