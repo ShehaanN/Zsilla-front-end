@@ -12,6 +12,7 @@ import store from "./lib/store.js";
 import CheckoutPage from "./pages/checkout.page.jsx";
 import OrderSuccessPage from "./pages/ordersuccess.page";
 import MyOrderPage from "./pages/myorder.page";
+import OrderDetailsPage from "./pages/orderdetails.page";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -29,6 +30,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/order-success" element={<OrderSuccessPage />} />
             <Route path="/orders" element={<MyOrderPage />} />
+            <Route path="/orders/:id" element={<OrderDetailsPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
